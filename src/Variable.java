@@ -53,7 +53,7 @@ public class Variable {
 
 	public void add(String other) {
 		if (type == ZpmVariableType.INT) {
-			new ZpmVariableTypeError("Subtraction is undefined for strings");
+			new ZpmVariableTypeError("Cannot add a string to an int");
 		} else {
 			stringValue += other;
 		}
@@ -116,6 +116,14 @@ public class Variable {
 		return valueToReturn + ")";
 	}
 	
+	public String toStringForPrint() {
+		if (type == ZpmVariableType.STRING) {
+			return stringValue;
+		} else {
+			return "" + intValue;
+		}
+	}
+	
 	public String getStringValue() {
 		if (type == ZpmVariableType.INT) {
 			new ZpmVariableTypeError("Tried to get the string value of an int variable");
@@ -136,5 +144,13 @@ public class Variable {
 	
 	public ZpmVariableType getType() {
 		return type;
+	}
+	
+	public Variable clone() {
+		if (type == ZpmVariableType.INT) {
+			return new Variable(intValue);
+		} else {
+			return new Variable(stringValue);
+		}
 	}
 }
