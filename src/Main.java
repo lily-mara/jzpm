@@ -21,13 +21,12 @@ public class Main {
 	}
 	
 	public static void loop(InputStream in, String prompt) {
-		Map<VariableBinding, Variable> symbolTable = new HashMap<VariableBinding, Variable>();
+		Map<VariableBinding, Variable> symbolTable = new HashMap<>();
 		Scanner s = new Scanner(in);
 		StatementParser parser;
 		Statement statement;
-		System.out.print(prompt);
 
-		while (s.hasNext()) {
+		do {
 			System.out.print(prompt);
 			parser = new StatementParser(s.nextLine());
 			statement = parser.parse();
@@ -36,7 +35,7 @@ public class Main {
 			} else {
 				System.err.println("SYNTAX ERROR");
 			}
-		}
+		} while (in.equals(System.in) || s.hasNext());
 		
 		s.close();
 	}
