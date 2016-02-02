@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.*;
 
 public class StatementParser {
@@ -12,12 +11,12 @@ public class StatementParser {
 	public static final String ENDFOR = "ENDFOR";
 	
 	
-	private static Pattern assignmentPattern = Pattern.compile(VARIABLE + " " + OPERATOR + " (.*) ;");
-	private static Pattern variablePattern = Pattern.compile(VARIABLE);
-	private static Pattern intPattern = Pattern.compile(INT);
-	private static Pattern stringPattern = Pattern.compile(STRING);
-	private static Pattern printPattern = Pattern.compile(PRINT + " " + VARIABLE + " ;");
-	private static Pattern forPattern = Pattern.compile(FOR + " " + INT + "(.*) "+ ENDFOR);
+	public static final Pattern assignmentPattern = Pattern.compile(VARIABLE + " " + OPERATOR + " (\".*\"|[^;]+) ;");
+	public static final Pattern variablePattern = Pattern.compile(VARIABLE);
+	public static final Pattern intPattern = Pattern.compile(INT);
+	public static final Pattern stringPattern = Pattern.compile(STRING);
+	public static final Pattern printPattern = Pattern.compile(PRINT + " " + VARIABLE + " ;");
+	public static final Pattern forPattern = Pattern.compile(FOR + " " + INT + "(.*) "+ ENDFOR);
 	
 	private String inputLine;
 	
@@ -104,19 +103,16 @@ public class StatementParser {
 			m = assignmentPattern.matcher(input);
 			parser = new StatementParser(input);
 			if (m.find()) {
-				String body = m.group(0);
 				statements.add(parser.parseAssignmentStatement());
 				input = input.substring(m.end());
 			} else {
 				m = printPattern.matcher(input);
 				if (m.find()) {
-					String body = m.group(0);
 					statements.add(parser.parsePrintStatement());
 					input = input.substring(m.end());
 				} else {
 					m = forPattern.matcher(input);
 					if (m.find()) {
-						String body = m.group(0);
 						statements.add(parser.parseForStatement());
 						input = input.substring(m.end());
 					} else {
