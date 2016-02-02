@@ -17,7 +17,8 @@ public class StatementParser {
 	public static final Pattern stringPattern = Pattern.compile(STRING);
 	public static final Pattern printPattern = Pattern.compile(PRINT + " " + VARIABLE + " ;");
 	public static final Pattern forPattern = Pattern.compile(FOR + " " + INT + "(.*) "+ ENDFOR);
-	
+	public static final Pattern hcfPattern = Pattern.compile("HCF ;");
+
 	private String inputLine;
 	
 	public StatementParser(String input) {
@@ -39,7 +40,12 @@ public class StatementParser {
 		if (s != null) {
 			return s;
 		}
-		
+
+		s = parseHcfStatement();
+		if (s != null) {
+			return s;
+		}
+
 		return null;
 	}
 	
@@ -135,7 +141,15 @@ public class StatementParser {
 		}
 		return null;
 	}
-	
+
+	private Statement parseHcfStatement() {
+		Matcher m = hcfPattern.matcher(inputLine);
+		if (m.find()) {
+			return new HaltAndCatchFireStatement();
+		}
+		return null;
+	}
+
 	private Statement parseForStatement() {
 		Matcher forMatcher = forPattern.matcher(inputLine);
 		if (forMatcher.find()) {
